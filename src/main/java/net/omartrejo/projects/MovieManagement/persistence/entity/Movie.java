@@ -1,6 +1,7 @@
 package net.omartrejo.projects.MovieManagement.persistence.entity;
 
 import jakarta.persistence.*;
+import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public class Movie {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -16,7 +17,8 @@ public class Movie {
     @Column(nullable = false)
     private String director;
 
-    private String genero;
+    @Enumerated(EnumType.STRING)//Guarda valores en tipo String en vez de ORDINAL(numero)
+    private MovieGenre genre;
 
     private int releaseYear;
 
@@ -47,12 +49,12 @@ public class Movie {
         this.director = director;
     }
 
-    public String getGenero() {
-        return genero;
+    public MovieGenre getGenre() {
+        return genre;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public void setGenre(MovieGenre genre) {
+        this.genre = genre;
     }
 
     public int getReleaseYear() {
