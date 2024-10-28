@@ -9,7 +9,7 @@ public interface MovieService {
 
     List<Movie> findAll();
 
-    List<Movie> findAllByTitle(String tittle);
+    List<Movie> findAllByTitle(String title);
 
     List<Movie> findAllByGenre(MovieGenre genre);
 

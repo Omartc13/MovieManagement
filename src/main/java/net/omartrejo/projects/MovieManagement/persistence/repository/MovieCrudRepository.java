@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface MovieCrudRepository extends JpaRepository<Movie,Long> {
 
-    List<Movie>findByTittleContaining(String tittle);
+    List<Movie>findByTitleContaining(String title);
 
     List<Movie>findByGenre(MovieGenre genre);
 
-    List<Movie> findByGenreAndTittleContaining(MovieGenre genre, String tittle);
+    List<Movie> findByGenreAndTitleContaining(MovieGenre genre, String title);
 
 }

@@ -1,6 +1,7 @@
 package net.omartrejo.projects.MovieManagement.persistence.repository;
 
 import net.omartrejo.projects.MovieManagement.persistence.entity.Rating;
+import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 import org.hibernate.annotations.processing.SQL;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +14,6 @@ public interface RatingCrudRepository extends JpaRepository<Rating,Long> {
     List<Rating>findByUserUsername(String username);
 
     @SQL("SELECT r FROM Rating r JOIN r.user u WHERE u.username= ?1")
-    List<Rating>findByUser(String username);
+    List<Rating>findByUser(User username);
 
 }

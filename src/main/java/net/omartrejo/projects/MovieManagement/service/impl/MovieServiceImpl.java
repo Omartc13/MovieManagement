@@ -23,8 +23,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> findAllByTitle(String tittle) {
-        return movieCrudRepository.findByTittleContaining(tittle);
+    public List<Movie> findAllByTitle(String title) {
+        return movieCrudRepository.findByTitleContaining(title);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> findAllByGenreAndTitle(MovieGenre genre, String title) {
-        return movieCrudRepository.findByGenreAndTittleContaining(genre,title);
+        return movieCrudRepository.findByGenreAndTitleContaining(genre,title);
     }
 
     @Override
