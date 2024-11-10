@@ -1,5 +1,6 @@
 package net.omartrejo.projects.MovieManagement.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
 import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 import net.omartrejo.projects.MovieManagement.service.UserService;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,7 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<List<User>> findAll(@RequestParam(required = false) String name){
 
         List<User> users=null;
@@ -31,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{user}")
+    @GetMapping(value = "/{user}")
     public ResponseEntity<User> findOneByUsername(@PathVariable("user") String username){
 
         try {
@@ -42,5 +44,40 @@ public class UserController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<User> createOne(@RequestBody User newUser,
+                                          HttpServletRequest request){
+
+        User userCreated= userService.saveOne(newUser);
+
+        String baseUrl= request.getRequestURL().toString();
+
+        URI newLocation = URI.create(baseUrl+"/"+userCreated.getUsername());
+
+        return ResponseEntity.created(newLocation).body(userCreated);
+    }
+
+    @PutMapping(value = "/{username}")
+    public ResponseEntity<User> updateOneByUser(@PathVariable String username,
+                                                @RequestBody User user){
+
+        try {
+            User updateUser = userService.updateOneByUsername(username, user);
+            return ResponseEntity.ok(updateUser);
+        }catch (ObjectNotFoundException exception){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping(value = "{username}")
+    public ResponseEntity<Void> deleteOneByUsername(@PathVariable String username){
+
+        try {
+            userService.deleteOneByUsername(username);
+            return ResponseEntity.noContent().build();
+        }catch (ObjectNotFoundException exception){
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
