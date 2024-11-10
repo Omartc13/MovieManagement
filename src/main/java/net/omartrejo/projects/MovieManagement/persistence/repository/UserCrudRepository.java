@@ -1,5 +1,6 @@
 package net.omartrejo.projects.MovieManagement.persistence.repository;
 
+import jakarta.transaction.Transactional;
 import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,6 +15,8 @@ public interface UserCrudRepository extends JpaRepository<User,Long> {
     Optional<User> findByUsername(String username);
 
     @Modifying
+    @Transactional
     int deleteByUsername(String username);
+    
 
 }

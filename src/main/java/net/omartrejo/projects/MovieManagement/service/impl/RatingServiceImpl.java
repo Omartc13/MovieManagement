@@ -6,30 +6,36 @@ import net.omartrejo.projects.MovieManagement.persistence.repository.RatingCrudR
 import net.omartrejo.projects.MovieManagement.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class RatingServiceImpl implements RatingService {
 
     @Autowired
     private RatingCrudRepository ratingCrudRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Rating> findAll() {
         return ratingCrudRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Rating> findAllByMovieId(Long movieId) {
         return ratingCrudRepository.findByMovieId(movieId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Rating> findAllByUsername(String username) {
         return ratingCrudRepository.findByUserUsername(username);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Rating findOneById(Long id) {
         return ratingCrudRepository.findById(id)
