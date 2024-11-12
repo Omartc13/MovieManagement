@@ -18,6 +18,5 @@ public interface UserService {
 
     void deleteOneByUsername(String username);
 
-    void deleteAll();
 
 }
