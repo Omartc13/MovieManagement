@@ -1,20 +1,22 @@
 package net.omartrejo.projects.MovieManagement.service;
 
+import net.omartrejo.projects.MovieManagement.dto.request.SaveUser;
+import net.omartrejo.projects.MovieManagement.dto.response.GetUser;
 import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> findAll();
+    List<GetUser> findAll();
 
-    List<User>findAllByName(String name);
+    List<GetUser>findAllByName(String name);
 
-    User findOneByUsername(String username);
+    GetUser findOneByUsername(String username);
 
-    User saveOne(User user);
+    GetUser saveOne(SaveUser saveDto);
 
-    User updateOneByUsername(String username, User user);
+    GetUser updateOneByUsername(String username, SaveUser saveDto);
 
     void deleteOneByUsername(String username);
 

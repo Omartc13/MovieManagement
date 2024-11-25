@@ -1,6 +1,8 @@
 package net.omartrejo.projects.MovieManagement.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.omartrejo.projects.MovieManagement.dto.request.SaveUser;
+import net.omartrejo.projects.MovieManagement.dto.response.GetUser;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
 import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 import net.omartrejo.projects.MovieManagement.service.UserService;
@@ -20,9 +22,9 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(@RequestParam(required = false) String name){
+    public ResponseEntity<List<GetUser>> findAll(@RequestParam(required = false) String name){
 
-        List<User> users=null;
+        List<GetUser> users=null;
 
         if (StringUtils.hasText(name)){
             users=userService.findAllByName(name);
@@ -34,35 +36,34 @@ public class UserController {
     }
 
     @GetMapping(value = "/{user}")
-    public ResponseEntity<User> findOneByUsername(@PathVariable("user") String username){
+    public ResponseEntity<GetUser> findOneByUsername(@PathVariable("user") String username){
 
         try {
             return ResponseEntity.ok(userService.findOneByUsername(username));
         }catch (ObjectNotFoundException exception){
-//            return ResponseEntity.status(404).build();
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<User> createOne(@RequestBody User newUser,
+    public ResponseEntity<GetUser> createOne(@RequestBody SaveUser saveDto,
                                           HttpServletRequest request){
 
-        User userCreated= userService.saveOne(newUser);
+        GetUser userCreated= userService.saveOne(saveDto);
 
         String baseUrl= request.getRequestURL().toString();
 
-        URI newLocation = URI.create(baseUrl+"/"+userCreated.getUsername());
+        URI newLocation = URI.create(baseUrl+"/"+userCreated.username());
 
         return ResponseEntity.created(newLocation).body(userCreated);
     }
 
     @PutMapping(value = "/{username}")
-    public ResponseEntity<User> updateOneByUser(@PathVariable String username,
-                                                @RequestBody User user){
+    public ResponseEntity<GetUser> updateOneByUser(@PathVariable String username,
+                                                @RequestBody SaveUser saveDto){
 
         try {
-            User updateUser = userService.updateOneByUsername(username, user);
+            GetUser updateUser = userService.updateOneByUsername(username, saveDto);
             return ResponseEntity.ok(updateUser);
         }catch (ObjectNotFoundException exception){
             return ResponseEntity.notFound().build();
