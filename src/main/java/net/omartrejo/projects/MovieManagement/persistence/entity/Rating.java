@@ -16,7 +16,7 @@ public class Rating {
     @Column(name ="movie_id", nullable = false)
     private long movieId;
 
-    @JsonProperty(value = "user-id")
+    @Column(name = "user_id",nullable = false)
     private long userId;
 
     //Permite obtener datos de movie desde Rating

@@ -9,6 +9,7 @@ import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 import net.omartrejo.projects.MovieManagement.persistence.repository.MovieCrudRepository;
 import net.omartrejo.projects.MovieManagement.persistence.repository.UserCrudRepository;
 import net.omartrejo.projects.MovieManagement.service.UserService;
+import net.omartrejo.projects.MovieManagement.service.validator.PasswordValidator;
 import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,12 +57,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GetUser saveOne(SaveUser saveDto) {
+        PasswordValidator.validatePassword(saveDto.password(), saveDto.passwordRepeated() );
         User newUser = UserMapper.toEntity(saveDto);
         return UserMapper.toGetDto(userCrudRepository.save(newUser));
     }
 
     @Override
     public GetUser updateOneByUsername(String username, SaveUser saveDto) {
+        PasswordValidator.validatePassword(saveDto.password(), saveDto.passwordRepeated());
         User oldUser= this.findOneEntityByUsername(username);
         UserMapper.updateEntity(oldUser, saveDto);
         return UserMapper.toGetDto(userCrudRepository.save(oldUser));

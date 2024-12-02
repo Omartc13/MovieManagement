@@ -1,6 +1,7 @@
 package net.omartrejo.projects.MovieManagement.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveUser;
 import net.omartrejo.projects.MovieManagement.dto.response.GetUser;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
@@ -46,21 +47,21 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<GetUser> createOne(@RequestBody SaveUser saveDto,
+    public ResponseEntity<GetUser> createOne(@RequestBody @Valid SaveUser saveDto,
                                           HttpServletRequest request){
 
         GetUser userCreated= userService.saveOne(saveDto);
 
         String baseUrl= request.getRequestURL().toString();
 
-        URI newLocation = URI.create(baseUrl+"/"+userCreated.username());
+        URI newLocation = URI.create(baseUrl+"/"+saveDto.username());
 
         return ResponseEntity.created(newLocation).body(userCreated);
     }
 
     @PutMapping(value = "/{username}")
     public ResponseEntity<GetUser> updateOneByUser(@PathVariable String username,
-                                                @RequestBody SaveUser saveDto){
+                                                 @RequestBody @Valid SaveUser saveDto){
 
         try {
             GetUser updateUser = userService.updateOneByUsername(username, saveDto);
