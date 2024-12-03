@@ -9,8 +9,10 @@ import net.omartrejo.projects.MovieManagement.persistence.repository.MovieCrudRe
 import net.omartrejo.projects.MovieManagement.service.MovieService;
 import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +61,8 @@ public class MovieServiceImpl implements MovieService {
     @Transactional(readOnly = true)
     private Movie findOneEntityById(Long id) {
         return movieCrudRepository.findById(id)
-                .orElseThrow(()-> new ObjectNotFoundException("[movie: "+Long.toString(id)+"]"));
+                .orElseThrow( () -> new ResponseStatusException(HttpStatusCode.valueOf(404),"Movie not found: "+id));
+        //.orElseThrow(()-> new ObjectNotFoundException("[movie: "+Long.toString(id)+"]"));
     }
 
     @Override
