@@ -1,5 +1,9 @@
 package net.omartrejo.projects.MovieManagement.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)//Cuando se lance esta exception se va a asociar al error 404 de http
 public class ObjectNotFoundException extends RuntimeException{
 
     private final String objectNotFoundName;

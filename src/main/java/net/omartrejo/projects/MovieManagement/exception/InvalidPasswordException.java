@@ -1,5 +1,9 @@
 package net.omartrejo.projects.MovieManagement.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)//Cuando se usa esta exception se asocia al error 400
 public class InvalidPasswordException extends RuntimeException{
 
     private final String password;
