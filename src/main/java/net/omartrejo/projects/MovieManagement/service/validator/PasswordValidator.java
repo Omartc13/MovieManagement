@@ -1,16 +1,14 @@
 package net.omartrejo.projects.MovieManagement.service.validator;
 
 import net.omartrejo.projects.MovieManagement.exception.InvalidPasswordException;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 public class PasswordValidator {
 
     public static void validatePassword(String password, String passwordRepeated){
 
         if (!StringUtils.hasText(password) || !StringUtils.hasText(passwordRepeated)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST.value(),"Passwords must contain data",new IllegalArgumentException("Passwords must contain data"));
+            throw new IllegalArgumentException("Password must contains data");
         }
 
         if (!password.equals(passwordRepeated)){

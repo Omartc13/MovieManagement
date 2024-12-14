@@ -1,10 +1,14 @@
 package net.omartrejo.projects.MovieManagement.controller;
 
 import ch.qos.logback.core.util.StringUtil;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveMovie;
+import net.omartrejo.projects.MovieManagement.dto.response.ApiError;
 import net.omartrejo.projects.MovieManagement.dto.response.GetMovie;
+import net.omartrejo.projects.MovieManagement.exception.InvalidPasswordException;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
 import net.omartrejo.projects.MovieManagement.persistence.entity.Movie;
 import net.omartrejo.projects.MovieManagement.service.MovieService;
@@ -16,9 +20,15 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.net.URI;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -70,24 +80,13 @@ public class MovieController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<GetMovie> updateOneById(@PathVariable Long id,
                                                   @Valid @RequestBody SaveMovie saveDto){
-
-        try {
             GetMovie updateMovie =movieService.updateByOneId(id,saveDto);
             return ResponseEntity.ok(updateMovie);
-        }catch (ObjectNotFoundException exception){
-            return ResponseEntity.notFound().build();
-        }
-
     }
 
     @DeleteMapping(value ="/{id}" )
     public ResponseEntity<Void> deleteOneById(@PathVariable Long id){
-        try{
             movieService.deleteOneById(id);
             return ResponseEntity.noContent().build();
-        }catch (ObjectNotFoundException exception){
-            return ResponseEntity.notFound().build();
-        }
     }
-
 }
