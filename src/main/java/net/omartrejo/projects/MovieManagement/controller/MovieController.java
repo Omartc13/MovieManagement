@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import net.omartrejo.projects.MovieManagement.dto.request.MovieSearchCriteria;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveMovie;
 import net.omartrejo.projects.MovieManagement.dto.response.ApiError;
 import net.omartrejo.projects.MovieManagement.dto.response.GetMovie;
@@ -14,6 +15,10 @@ import net.omartrejo.projects.MovieManagement.persistence.entity.Movie;
 import net.omartrejo.projects.MovieManagement.service.MovieService;
 import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -39,22 +44,23 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping
-    public ResponseEntity<List<GetMovie>> findAll(@RequestParam(required = false) String title,
-                                                  @RequestParam(required = false) MovieGenre genre){
+    public ResponseEntity<Page<GetMovie>> findAll(@RequestParam(required = false) String title,
+                                                  @RequestParam(required = false) MovieGenre genre,
+                                                  @RequestParam(required = false, name = "min_release_year") Integer minReleaseYear,
+                                                  @RequestParam(required = false, name = "max_release_year") Integer maxReleaseYear,
+                                                  @RequestParam(required = false, name = "min_average_rating") Integer minAverageRating,
+                                                  @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
+                                                  @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+                                                  @RequestParam(required = false, defaultValue = "id") String sortBy){
 
-        List<GetMovie> movies = null;
+        Sort movieSort = Sort.by(sortBy.trim());
+        Pageable moviePagable = PageRequest.of(pageNumber,pageSize,movieSort);
 
-        if (StringUtils.hasText(title) && genre !=null){
-            movies = movieService.findAllByGenreAndTitle(genre,title);
-        } else if (StringUtils.hasText(title)) {
-            movies = movieService.findAllByTitle(title);
-        } else if (genre != null) {
-            movies=movieService.findAllByGenre(genre);
-        }else {
-            movies = movieService.findAll();
-        }
+        MovieSearchCriteria searchCriteria = new MovieSearchCriteria(title,genre,minReleaseYear,maxReleaseYear,minAverageRating);
+        Page<GetMovie> movies = movieService.findAll(searchCriteria,moviePagable);
 
         return ResponseEntity.ok(movies);
+
     }
 
     @GetMapping(value = "/{id}")
