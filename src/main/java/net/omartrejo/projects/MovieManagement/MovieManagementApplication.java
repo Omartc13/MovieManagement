@@ -18,22 +18,5 @@ public class MovieManagementApplication {
 		SpringApplication.run(MovieManagementApplication.class, args);
 	}
 
-	@Autowired
-	private MovieCrudRepository movieCrudRepository;
-
-
-	@Bean
-	public CommandLineRunner testFindAllMoviesByGenreOrderBy(){
-		return args -> {
-			System.out.println("Peliculas de Drama por titulo");
-			Sort.Direction direction = Sort.Direction.fromString("DESC");
-			Sort sort = Sort.by(direction,"releaseYear").and(Sort.by(Sort.Direction.ASC,"id"));
-
-			Pageable pageable = PageRequest.of(0,10,sort);
-
-			movieCrudRepository.findAllByGenre(MovieGenre.DRAMA,pageable)
-					.forEach(System.out::println);
-		};
-	}
 
 }

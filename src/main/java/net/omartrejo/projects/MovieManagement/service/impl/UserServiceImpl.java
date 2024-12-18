@@ -1,5 +1,6 @@
 package net.omartrejo.projects.MovieManagement.service.impl;
 
+import jakarta.persistence.criteria.Predicate;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveUser;
 import net.omartrejo.projects.MovieManagement.dto.response.GetUser;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
@@ -12,9 +13,13 @@ import net.omartrejo.projects.MovieManagement.service.UserService;
 import net.omartrejo.projects.MovieManagement.service.validator.PasswordValidator;
 import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -31,17 +36,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<GetUser> findAll() {
-        List<User> entities = userCrudRepository.findAll();
-        return UserMapper.toGetDtoList(entities);
+    public Page<GetUser> findAll(String name, Pageable pageable) {
+
+
+        Page<User> entities = userCrudRepository.findByNameContaining(name,pageable);
+        return entities.map(UserMapper::toGetDto);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<GetUser> findAllByName(String name) {
-        List<User> entities = userCrudRepository.findByNameContaining(name);
-        return UserMapper.toGetDtoList(entities);
-    }
 
     @Transactional(readOnly = true)
     @Override
