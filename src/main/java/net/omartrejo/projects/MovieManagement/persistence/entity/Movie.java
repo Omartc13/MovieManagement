@@ -93,4 +93,15 @@ public class Movie {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "releaseYear=" + releaseYear +
+                ", id=" + id +
+                ", title='" + title + '\'' +
+                ", genre=" + genre +
+                ", director='" + director + '\'' +
+                '}';
+    }
 }
