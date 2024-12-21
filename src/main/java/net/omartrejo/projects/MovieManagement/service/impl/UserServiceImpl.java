@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<GetUser> findAll(String name, Pageable pageable) {
 
-
         Page<User> entities = userCrudRepository.findByNameContaining(name,pageable);
         return entities.map(UserMapper::toGetDto);
     }
@@ -51,9 +50,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    private User findOneEntityByUsername(String username) {
+    @Override
+    public User findOneEntityByUsername(String username) {
         return userCrudRepository.findByUsername(username)
-                .orElseThrow( () -> new ObjectNotFoundException("[User: "+username+"]"));
+                .orElseThrow( () -> new ObjectNotFoundException("[user: "+username+"]"));
     }
 
 

@@ -7,17 +7,18 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.Check;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"movie_id","user_id"}))
 public class Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name ="movie_id", nullable = false)
-    private long movieId;
+    private Long movieId;
 
     @Column(name = "user_id",nullable = false)
-    private long userId;
+    private Long userId;
 
     //Permite obtener datos de movie desde Rating
     @ManyToOne
@@ -37,7 +38,7 @@ public class Rating {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -45,7 +46,7 @@ public class Rating {
         return movieId;
     }
 
-    public void setMovieId(long movieId) {
+    public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
 
@@ -53,7 +54,7 @@ public class Rating {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

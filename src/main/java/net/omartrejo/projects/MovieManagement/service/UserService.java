@@ -12,7 +12,21 @@ public interface UserService {
 
     Page<GetUser> findAll(String name, Pageable pageable);
 
+    /**
+     * @param username
+     * @throws {@link net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException} if the given username don't exist
+     * @return
+     */
+
     GetUser findOneByUsername(String username);
+
+    /**
+     * @param username
+     * @throws {@link net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException} if the given username don't exist
+     * @return
+     */
+
+    User findOneEntityByUsername(String username);
 
     GetUser saveOne(SaveUser saveDto);
 

@@ -29,16 +29,13 @@ public class FindAllMoviesSpecifications implements Specification<Movie> {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        Join<Movie, Rating> joinMovieRating = root.join("ratings");
-        Join<Rating, User> joinRatingUser = joinMovieRating.join("user");
-
         if (StringUtils.hasText(this.searchCriteria.title())){
-            Predicate titleLike= criteriaBuilder.like(root.get("title"),"%"+this.searchCriteria.title()+"%");
+            Predicate titleLike = criteriaBuilder.like(root.get("title"),"%"+this.searchCriteria.title()+"%");
             //m.title like '%asas%'
             predicates.add(titleLike);
         }
 
-        if (this.searchCriteria.genre()!=null){
+        if (this.searchCriteria.genre() != null){
             Predicate genreEqual = criteriaBuilder.equal(root.get("genre"),this.searchCriteria.genre());
             //m.genre = ?
             predicates.add(genreEqual);
@@ -57,17 +54,12 @@ public class FindAllMoviesSpecifications implements Specification<Movie> {
         }
 
         if (this.searchCriteria.minAverageRating() != null && this.searchCriteria.minAverageRating() >0){
-
             Subquery<Double> averageRatingSubQuery = getAverageRatingSubQuery(root, query, criteriaBuilder);
-
             Predicate averageRatingGreaterThanEqual = criteriaBuilder.greaterThanOrEqualTo(averageRatingSubQuery,this.searchCriteria.minAverageRating().doubleValue());
 
             predicates.add(averageRatingGreaterThanEqual);
-
         }
 
-        Predicate usernameEqual = criteriaBuilder.equal(joinRatingUser.get("username"), "john_doe");
-        predicates.add(usernameEqual);
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 
@@ -91,4 +83,9 @@ public class FindAllMoviesSpecifications implements Specification<Movie> {
 
         return averageRatingSubQuery;
     }
+
+    private Subquery<Double> getAverageRatingSubQuery() {
+        return null;
+    }
+
 }

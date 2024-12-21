@@ -19,7 +19,7 @@ public interface UserCrudRepository extends JpaRepository<User,Long>, JpaSpecifi
     default Page<User> findByNameContaining(String name, Pageable pageable){
         Specification<User> userSpecification = (root, query, builder) -> {
             if (StringUtils.hasText(name)){
-                Predicate nameLike = builder.like(root.get("name"),"%"+name+"%");
+                Predicate nameLike = builder.like(root.get("name"),"%" + name + "%");
                 return nameLike;
             }
             return null;
