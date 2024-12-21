@@ -3,24 +3,19 @@ package net.omartrejo.projects.MovieManagement.service.impl;
 import net.omartrejo.projects.MovieManagement.dto.request.MovieSearchCriteria;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveMovie;
 import net.omartrejo.projects.MovieManagement.dto.response.GetMovie;
+import net.omartrejo.projects.MovieManagement.dto.response.GetMovieStatistic;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
 import net.omartrejo.projects.MovieManagement.mapper.MovieMapper;
 import net.omartrejo.projects.MovieManagement.persistence.entity.Movie;
 import net.omartrejo.projects.MovieManagement.persistence.repository.MovieCrudRepository;
+import net.omartrejo.projects.MovieManagement.persistence.repository.RatingCrudRepository;
 import net.omartrejo.projects.MovieManagement.persistence.specification.FindAllMoviesSpecifications;
 import net.omartrejo.projects.MovieManagement.service.MovieService;
-import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -28,6 +23,9 @@ public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private MovieCrudRepository movieCrudRepository;
+
+    @Autowired
+    private RatingCrudRepository ratingCrudRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -43,8 +41,20 @@ public class MovieServiceImpl implements MovieService {
 
     @Transactional(readOnly = true)
     @Override
-    public GetMovie findOneById(Long id) {
-        return MovieMapper.toGetDto(this.findOneEntityById(id));
+    public GetMovieStatistic findOneById(Long id) {
+
+        int totalRatings = ratingCrudRepository.countByMovieId(id);
+        double averageRating = ratingCrudRepository.avgRatingByMovieId(id);
+        int lowestRating = ratingCrudRepository.minRatingByMovieId(id);
+        int highestRating = ratingCrudRepository.maxRatingByMovieId(id);
+
+        return MovieMapper.toGetMovieStatisticDto(
+                this.findOneEntityById(id),
+                totalRatings,
+                averageRating,
+                lowestRating,
+                highestRating
+        );
     }
 
     @Transactional(readOnly = true)

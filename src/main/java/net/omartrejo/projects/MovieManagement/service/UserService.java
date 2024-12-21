@@ -2,6 +2,7 @@ package net.omartrejo.projects.MovieManagement.service;
 
 import net.omartrejo.projects.MovieManagement.dto.request.SaveUser;
 import net.omartrejo.projects.MovieManagement.dto.response.GetUser;
+import net.omartrejo.projects.MovieManagement.dto.response.GetUserStatistic;
 import net.omartrejo.projects.MovieManagement.persistence.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ public interface UserService {
      * @return
      */
 
-    GetUser findOneByUsername(String username);
+    GetUserStatistic findOneByUsername(String username);
 
     /**
      * @param username

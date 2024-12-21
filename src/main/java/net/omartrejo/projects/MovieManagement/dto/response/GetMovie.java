@@ -12,7 +12,7 @@ public record GetMovie(
         String director,
         MovieGenre genre,
         @JsonProperty(value = "release_Year") int releaseYear,
-        List<GetRating> ratings
+        @JsonProperty("total_ratings") int totalRatings
 ) implements Serializable {//Record implementa el constructor en la firma de la clase
 
 

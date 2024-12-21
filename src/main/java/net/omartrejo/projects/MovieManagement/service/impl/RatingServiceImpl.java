@@ -3,6 +3,8 @@ package net.omartrejo.projects.MovieManagement.service.impl;
 import jakarta.persistence.EntityManager;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveRating;
 import net.omartrejo.projects.MovieManagement.dto.response.GetCompleteRating;
+import net.omartrejo.projects.MovieManagement.dto.response.GetMovie;
+import net.omartrejo.projects.MovieManagement.dto.response.GetUser;
 import net.omartrejo.projects.MovieManagement.exception.DuplicateRatingException;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
 import net.omartrejo.projects.MovieManagement.mapper.RatingMapper;
@@ -41,14 +43,14 @@ public class RatingServiceImpl implements RatingService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<GetCompleteRating> findAllByMovieId(Long movieId, Pageable pageable) {
-        return ratingCrudRepository.findByMovieId(movieId, pageable).map(RatingMapper::toGetCompleteRatingDto);
+    public Page<GetMovie.GetRating> findAllByMovieId(Long movieId, Pageable pageable) {
+        return ratingCrudRepository.findByMovieId(movieId, pageable).map(RatingMapper::toGetMovieRatingDto);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Page<GetCompleteRating> findAllByUsername(String username, Pageable pageable) {
-        return ratingCrudRepository.findByUserUsername(username, pageable).map(RatingMapper::toGetCompleteRatingDto);
+    public Page<GetUser.GetRating> findAllByUsername(String username, Pageable pageable) {
+        return ratingCrudRepository.findByUserUsername(username, pageable).map(RatingMapper::toGetUserRatingDto);
     }
 
     @Transactional(readOnly = true)

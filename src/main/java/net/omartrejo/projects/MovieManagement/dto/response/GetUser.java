@@ -9,7 +9,7 @@ public record GetUser(
 
         String username,
         String name,
-        List<GetRating> ratings
+        @JsonProperty("total_ratings") int totalRatings
 
 ) implements Serializable {
 

@@ -9,10 +9,12 @@ import net.omartrejo.projects.MovieManagement.dto.request.MovieSearchCriteria;
 import net.omartrejo.projects.MovieManagement.dto.request.SaveMovie;
 import net.omartrejo.projects.MovieManagement.dto.response.ApiError;
 import net.omartrejo.projects.MovieManagement.dto.response.GetMovie;
+import net.omartrejo.projects.MovieManagement.dto.response.GetMovieStatistic;
 import net.omartrejo.projects.MovieManagement.exception.InvalidPasswordException;
 import net.omartrejo.projects.MovieManagement.exception.ObjectNotFoundException;
 import net.omartrejo.projects.MovieManagement.persistence.entity.Movie;
 import net.omartrejo.projects.MovieManagement.service.MovieService;
+import net.omartrejo.projects.MovieManagement.service.RatingService;
 import net.omartrejo.projects.MovieManagement.util.MovieGenre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,6 +45,9 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
+    @Autowired
+    private RatingService ratingService;
+
     @GetMapping
     public ResponseEntity<Page<GetMovie>> findAll(@RequestParam(required = false) String title,
                                                   @RequestParam(required = false) MovieGenre genre,
@@ -60,9 +65,16 @@ public class MovieController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<GetMovie> findOneById(@PathVariable Long id){
+    public ResponseEntity<GetMovieStatistic> findOneById(@PathVariable Long id){
             return ResponseEntity.ok(movieService.findOneById(id));
     }
+
+//    /movies/{id}/ratings
+    @GetMapping(value = "/{id}/ratings")
+    public ResponseEntity<Page<GetMovie.GetRating>> findAllRatingsForMovieById(@PathVariable Long id, Pageable pageable){
+        return ResponseEntity.ok(ratingService.findAllByMovieId(id, pageable));
+    }
+
 
     @PostMapping
     public ResponseEntity<GetMovie> createOne(@RequestBody @Valid SaveMovie saveDto, //@Valid para validar anotaciones en SaveMovie
