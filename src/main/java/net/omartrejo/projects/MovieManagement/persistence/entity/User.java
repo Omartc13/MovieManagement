@@ -28,7 +28,7 @@ public class User {
     @Column(updatable = false,columnDefinition = "TIMESTAMP DEFAULT NOW()")
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = {CascadeType.REMOVE})
     private List<Rating> ratings;
 
     public long getId() {
